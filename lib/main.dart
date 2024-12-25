@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() async {
     try {
-      var result = await LoginDao.login("13263255716", "123456");
+      var result = await LoginDao.login("", "");
       debugPrint(result.toString());
     } on NeedLogin catch (e) {
       debugPrint(e.message);
