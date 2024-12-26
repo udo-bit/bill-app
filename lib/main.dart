@@ -3,7 +3,7 @@ import 'package:bil_app/http/core/hi_error.dart';
 import 'package:bil_app/http/core/hi_net.dart';
 import 'package:bil_app/http/dao/login_dao.dart';
 import 'package:bil_app/http/request/notice_request.dart';
-import 'package:bil_app/page/register_page.dart';
+import 'package:bil_app/page/login_page.dart';
 import 'package:bil_app/util/color.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(primarySwatch: white),
-      home: const RegisterPage(),
+      home: const LoginPage(),
+      // const RegisterPage(),
     );
   }
 }

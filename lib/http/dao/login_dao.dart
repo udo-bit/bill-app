@@ -34,6 +34,8 @@ class LoginDao {
     if (result['code'] == 0 && result['data'] != null) {
       HiCache.getInstance().setString(BOARDING_PASS, result['data']);
     }
+
+    return result;
   }
 
   static getBoardingPass() {
