@@ -1,3 +1,4 @@
+import 'package:bil_app/navigator/hi_navigator.dart';
 import 'package:bil_app/util/toast.dart';
 import 'package:bil_app/widget/appbar.dart';
 import 'package:bil_app/widget/login_button.dart';
@@ -25,7 +26,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar('账号密码登陆', '注册', () {}),
+      appBar: appBar('账号密码登陆', '注册', () {
+        HiNavigator.getInstance().onJumpTo(RouteStatus.registration);
+      }),
       body: Container(
         child: ListView(
           children: [
@@ -83,6 +86,8 @@ class _LoginPageState extends State<LoginPage> {
       var result = await LoginDao.login(userName!, password!);
       if (result['code'] == 0) {
         showToast("登陆成功");
+        HiNavigator.getInstance().onJumpTo(RouteStatus.home);
+        // 跳转首页
       } else {
         showWarnToast(result['msg']);
       }
