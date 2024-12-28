@@ -1,8 +1,8 @@
 import 'package:bil_app/http/dao/login_dao.dart';
 import 'package:bil_app/model/video_model.dart';
+import 'package:bil_app/navigator/bottom_navigator.dart';
 import 'package:bil_app/navigator/hi_navigator.dart';
 import 'package:bil_app/page/detail_page.dart';
-import 'package:bil_app/page/home_page.dart';
 import 'package:bil_app/page/login_page.dart';
 import 'package:bil_app/page/register_page.dart';
 import 'package:bil_app/util/toast.dart';
@@ -55,10 +55,7 @@ class BiliRouteDelegate extends RouterDelegate<BiliPath>
     if (routeStatus == RouteStatus.home) {
       // 如果是去往首页，把堆栈清空再创建
       pages.clear();
-      page = pageWrap(HomePage(onJumpToDetail: (videoModel) {
-        this.videoModel = videoModel;
-        notifyListeners();
-      }));
+      page = pageWrap(const BottomNavigator());
     } else if (routeStatus == RouteStatus.detail) {
       page = pageWrap(DetailPage(videoModel: videoModel!));
     } else if (routeStatus == RouteStatus.registration) {
@@ -74,8 +71,9 @@ class BiliRouteDelegate extends RouterDelegate<BiliPath>
       page = MaterialPage(child: Container());
     }
 
-    // 原先页面和新页面
     tempPages = [...tempPages, page];
+    // 原先页面和新页面,通知所有的页面监听
+    HiNavigator.getInstance().notify(tempPages, pages);
     pages = tempPages;
     return WillPopScope(
         child: Navigator(
@@ -90,7 +88,9 @@ class BiliRouteDelegate extends RouterDelegate<BiliPath>
                 }
               }
             }
+            var tempPages = [...pages];
             pages.removeLast();
+            HiNavigator.getInstance().notify(pages, tempPages);
             if (!route.didPop(result)) {
               debugPrint('到底了！');
               return false;

@@ -22,6 +22,27 @@ class _LoginPageState extends State<LoginPage> {
   bool loginEnable = false;
   String? userName;
   String? password;
+  RouteChangeListener? listener;
+
+  @override
+  void initState() {
+    super.initState();
+    HiNavigator.getInstance().addListener(listener = (curr, pre) {
+      debugPrint('login curr: ${curr.page}');
+      debugPrint('login pre: ${pre?.page}');
+      if (widget == curr.page || curr.page is LoginPage) {
+        debugPrint('login page onResume');
+      } else if (widget == pre?.page || pre?.page is LoginPage) {
+        debugPrint('login page onPause');
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    HiNavigator.getInstance().removeListener(listener!);
+  }
 
   @override
   Widget build(BuildContext context) {
