@@ -1,5 +1,4 @@
 import 'package:bil_app/http/dao/login_dao.dart';
-import 'package:flutter/foundation.dart';
 
 enum HttpMethod { get, post, delete }
 
@@ -32,7 +31,7 @@ abstract class BaseRequest {
       if (pathStr.endsWith('/')) {
         pathStr = "$pathStr$pathParams";
       } else {
-        pathStr = "$path/$pathParams";
+        pathStr = "$pathStr/$pathParams";
       }
     }
     if (ustHttps) {
@@ -44,7 +43,6 @@ abstract class BaseRequest {
       addHeader(LoginDao.BOARDING_PASS, LoginDao.getBoardingPass());
     }
 
-    debugPrint('url:${uri.toString()}');
     return uri.toString();
   }
 

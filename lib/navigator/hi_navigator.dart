@@ -112,8 +112,8 @@ class HiNavigator extends _RouteJumpListener {
     if (current.page is BottomNavigator && _bottomTab != null) {
       current = _bottomTab!;
     }
-    debugPrint('打开的页面是：${current.page}');
-    debugPrint('之前的页面是：${_current?.page}');
+    // debugPrint('打开的页面是：${current.page}');
+    // debugPrint('之前的页面是：${_current?.page}');
     // 这里的作用是修改每个监听器回调的参数，从而通知每个监听器
     // 每个页面对应每个监听器，并且监听器的实现可以不一样
     // 只保证了监听器函数的签名是一样的
