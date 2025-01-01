@@ -1,4 +1,5 @@
 import 'package:bil_app/model/video_model.dart';
+import 'package:bil_app/widget/video_view.dart';
 import 'package:flutter/material.dart';
 
 class DetailPage extends StatefulWidget {
@@ -14,7 +15,13 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Text("vid: ${widget.videoModel.vid}"),
+      body: Column(
+        children: [
+          Text(widget.videoModel.vid),
+          Text(widget.videoModel.title),
+          VideoView(widget.videoModel.url!, cover: widget.videoModel.cover)
+        ],
+      ),
     );
   }
 }

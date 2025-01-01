@@ -22,3 +22,18 @@ Widget cachedImage(String url, {double? width, double? height}) {
         const Icon(Icons.error),
   );
 }
+
+LinearGradient blackLinearGradient({bool fromTop = true}) {
+  return LinearGradient(
+    colors: const [
+      Colors.black54,
+      Colors.black45,
+      Colors.black38,
+      Colors.black26,
+      Colors.black12,
+      Colors.transparent
+    ],
+    begin: fromTop ? Alignment.topCenter : Alignment.bottomCenter,
+    end: fromTop ? Alignment.bottomCenter : Alignment.topCenter,
+  );
+}
