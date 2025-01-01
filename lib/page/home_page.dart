@@ -3,13 +3,16 @@ import 'package:bil_app/http/core/hi_error.dart';
 import 'package:bil_app/http/dao/home_dao.dart';
 import 'package:bil_app/page/home_tab_page.dart';
 import 'package:bil_app/util/toast.dart';
+import 'package:bil_app/widget/loading_container.dart';
+import 'package:bil_app/widget/navigation_bar_plus.dart';
 import 'package:flutter/material.dart';
 
 import '../model/home_mo.dart';
 import '../navigator/hi_navigator.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final ValueChanged<int>? onJumpTo;
+  const HomePage({super.key, this.onJumpTo});
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -21,6 +24,7 @@ class _HomePageState extends HiState<HomePage>
   late TabController _controller;
   List<CategoryMo> categoryList = [];
   List<BannerMo> bannerList = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -43,28 +47,32 @@ class _HomePageState extends HiState<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    double top = MediaQuery.of(context).padding.top;
     super.build(context);
     return Scaffold(
-      body: Column(
+        body: LoadingContainer(
+      isLoading: _isLoading,
+      cover: true,
+      child: Column(
         children: [
+          NavigationBarPlus(child: _appBar()),
           Container(
             color: Colors.white,
-            padding: EdgeInsets.only(top: top),
             child: _tabBar(),
           ),
           Flexible(
-              child: TabBarView(
-            controller: _controller,
-            children: categoryList.map<HomeTabPage>((tab) {
-              return HomeTabPage(
-                  name: tab.name,
-                  bannerList: tab.name == "推荐" ? bannerList : null);
-            }).toList(),
+              child: Padding(
+            padding: const EdgeInsets.only(top: 5, left: 2, right: 2),
+            child: TabBarView(
+              controller: _controller,
+              children: categoryList.map<HomeTabPage>((tab) {
+                return HomeTabPage(tab.name,
+                    bannerList: tab.name == "推荐" ? bannerList : null);
+              }).toList(),
+            ),
           ))
         ],
       ),
-    );
+    ));
   }
 
   void loadData() async {
@@ -77,11 +85,18 @@ class _HomePageState extends HiState<HomePage>
       setState(() {
         categoryList = result.categoryList ?? [];
         bannerList = result.bannerList ?? [];
+        _isLoading = false;
       });
     } on NeedAuth catch (e) {
       showWarnToast(e.message);
+      setState(() {
+        _isLoading = false;
+      });
     } on HiNetError catch (e) {
       showWarnToast(e.message);
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -107,4 +122,56 @@ class _HomePageState extends HiState<HomePage>
 
   @override
   bool get wantKeepAlive => true;
+
+  _appBar() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 15, right: 15),
+      child: Row(
+        children: [
+          InkWell(
+            onTap: () {
+              if (widget.onJumpTo != null) {
+                widget.onJumpTo!(3);
+              }
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(23),
+              child: const Image(
+                height: 38,
+                width: 38,
+                image: AssetImage('images/avatar.png'),
+              ),
+            ),
+          ),
+          Expanded(
+              child: Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                padding: const EdgeInsets.only(left: 10),
+                height: 32,
+                alignment: Alignment.centerLeft,
+                decoration: BoxDecoration(color: Colors.grey[100]),
+                child: const Icon(
+                  Icons.search,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+          )),
+          const Icon(
+            Icons.import_export_outlined,
+            color: Colors.grey,
+          ),
+          const Padding(
+              padding: EdgeInsets.only(left: 12),
+              child: Icon(
+                Icons.mail_outline,
+                color: Colors.grey,
+              ))
+        ],
+      ),
+    );
+  }
 }

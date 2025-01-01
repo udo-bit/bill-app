@@ -19,17 +19,22 @@ class _BottomNavigatorState extends State<BottomNavigator> {
   static const initialPage = 0;
   final PageController _controller = PageController(initialPage: initialPage);
   int _currentIndex = initialPage;
+  late List<Widget> pages;
 
   bool _hasBuild = false;
-  List<Widget> pages = const [
-    HomePage(),
-    RankingPage(),
-    FavoritePage(),
-    ProfilePage()
-  ];
 
   @override
   Widget build(BuildContext context) {
+    pages = [
+      HomePage(
+        onJumpTo: (index) {
+          _onJumpTo(3, pageChange: false);
+        },
+      ),
+      const RankingPage(),
+      const FavoritePage(),
+      const ProfilePage()
+    ];
     if (!_hasBuild) {
       HiNavigator.getInstance()
           .onBottomTabChange(initialPage, pages[initialPage]);
