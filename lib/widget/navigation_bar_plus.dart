@@ -6,17 +6,18 @@ class NavigationBarPlus extends StatelessWidget {
   final double height;
   final StatusStyle statusStyle;
   final Color color;
-  final Widget child;
+  final Widget? child;
   const NavigationBarPlus(
       {super.key,
-      this.height = 46,
+      this.height = 55,
       this.statusStyle = StatusStyle.dartContent,
       this.color = Colors.white,
-      required this.child});
+      this.child});
 
   @override
   Widget build(BuildContext context) {
     final top = MediaQuery.of(context).padding.top;
+    print("top:$top");
     return Container(
       width: MediaQuery.of(context).size.width,
       height: top + height,
