@@ -3,6 +3,7 @@ import 'package:bil_app/http/core/hi_error.dart';
 import 'package:bil_app/http/dao/home_dao.dart';
 import 'package:bil_app/page/home_tab_page.dart';
 import 'package:bil_app/util/toast.dart';
+import 'package:bil_app/widget/hi_tab.dart';
 import 'package:bil_app/widget/loading_container.dart';
 import 'package:bil_app/widget/navigation_bar_plus.dart';
 import 'package:flutter/material.dart';
@@ -112,23 +113,19 @@ class _HomePageState extends HiState<HomePage>
   }
 
   _tabBar() {
-    return TabBar(
-      isScrollable: true,
-      tabAlignment: TabAlignment.start,
-      labelColor: Colors.black,
-      tabs: categoryList.map<Tab>((tab) {
-        return Tab(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            child: Text(
-              tab.name,
-              style: const TextStyle(fontSize: 16),
+    return HiTab(
+        controller: _controller,
+        categoryList.map<Tab>((tab) {
+          return Tab(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 5, right: 5),
+              child: Text(
+                tab.name,
+                style: const TextStyle(fontSize: 16),
+              ),
             ),
-          ),
-        );
-      }).toList(),
-      controller: _controller,
-    );
+          );
+        }).toList());
   }
 
   @override

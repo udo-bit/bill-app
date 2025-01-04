@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
+import 'format_util.dart';
+
 Widget cachedImage(String url, {double? width, double? height}) {
   return CachedNetworkImage(
     imageUrl: url,
@@ -36,4 +38,19 @@ LinearGradient blackLinearGradient({bool fromTop = true}) {
     begin: fromTop ? Alignment.topCenter : Alignment.bottomCenter,
     end: fromTop ? Alignment.bottomCenter : Alignment.topCenter,
   );
+}
+
+smallIconText(IconData iconData, var text) {
+  var style = const TextStyle(fontSize: 12, color: Colors.grey);
+  if (text is int) {
+    text = countFormat(text);
+  }
+  return [
+    Icon(
+      iconData,
+      color: Colors.grey,
+      size: 12,
+    ),
+    Text(' $text', style: style)
+  ];
 }
