@@ -54,3 +54,22 @@ smallIconText(IconData iconData, var text) {
     Text(' $text', style: style)
   ];
 }
+
+Border borderLine(BuildContext context,
+    {bool topSide = false, bool bottomSide = true}) {
+  BorderSide side = BorderSide(
+    color: Colors.grey[200]!,
+    width: 0.5,
+  );
+
+  return Border(
+      top: topSide ? side : BorderSide.none,
+      bottom: bottomSide ? side : BorderSide.none);
+}
+
+SizedBox hiSpace({double height = 1, double width = 1}) {
+  return SizedBox(
+    height: height,
+    width: width,
+  );
+}

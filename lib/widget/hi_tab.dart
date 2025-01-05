@@ -19,13 +19,12 @@ class HiTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TabBar(
-      tabAlignment: TabAlignment.start,
-      controller: controller,
-      isScrollable: true,
-      labelColor: primary,
-      unselectedLabelColor: unselectedLabelColor,
-      labelStyle: TextStyle(fontSize: fontSize),
-      tabs: tabs,
-    );
+        controller: controller,
+        isScrollable: true,
+        tabAlignment: TabAlignment.center,
+        labelColor: primary,
+        unselectedLabelColor: unselectedLabelColor,
+        labelStyle: TextStyle(fontSize: fontSize),
+        tabs: tabs);
   }
 }

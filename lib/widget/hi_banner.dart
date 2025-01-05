@@ -1,3 +1,5 @@
+import 'package:bil_app/model/video_model.dart';
+import 'package:bil_app/navigator/hi_navigator.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 
@@ -37,7 +39,7 @@ class HiBanner extends StatelessWidget {
   _image(BannerMo bannerMo) {
     return InkWell(
       onTap: () {
-        debugPrint('click the button');
+        handleBannerClick(bannerMo);
       },
       child: Container(
           padding: padding,
@@ -50,5 +52,15 @@ class HiBanner extends StatelessWidget {
             ),
           )),
     );
+  }
+
+  void handleBannerClick(BannerMo bannerMo) {
+    if (bannerMo.type == 'video') {
+      print(bannerMo);
+      HiNavigator.getInstance().onJumpTo(RouteStatus.detail,
+          args: {'videoMo': VideoModel(vid: bannerMo.url)});
+    } else {
+      print("type:${bannerMo.type},url:${bannerMo.url}");
+    }
   }
 }
