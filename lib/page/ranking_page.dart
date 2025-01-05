@@ -1,3 +1,5 @@
+import 'package:bil_app/http/dao/ranking_dao.dart';
+import 'package:bil_app/page/ranking_tab_page.dart';
 import 'package:bil_app/widget/navigation_bar_plus.dart';
 import 'package:flutter/material.dart';
 
@@ -23,13 +25,14 @@ class _RankingPageState extends State<RankingPage>
   void initState() {
     super.initState();
     _controller = TabController(length: TABS.length, vsync: this);
+    RankingDao.get("like");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        children: [_buildNavigationBar()],
+        children: [_buildNavigationBar(), _buildTabView()],
       ),
     );
   }
@@ -53,5 +56,15 @@ class _RankingPageState extends State<RankingPage>
         borderWidth: 3,
         unselectedLabelColor: Colors.black54,
         controller: _controller);
+  }
+
+  _buildTabView() {
+    return Flexible(
+        child: TabBarView(
+      controller: _controller,
+      children: TABS.map((tab) {
+        return RankingTabPage(sort: tab['key']!);
+      }).toList(),
+    ));
   }
 }
