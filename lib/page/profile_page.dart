@@ -4,6 +4,7 @@ import 'package:bil_app/model/profile_mo.dart';
 import 'package:bil_app/util/toast.dart';
 import 'package:bil_app/util/view_util.dart';
 import 'package:bil_app/widget/course_card.dart';
+import 'package:bil_app/widget/dark_model_item.dart';
 import 'package:bil_app/widget/hi_banner.dart';
 import 'package:bil_app/widget/hi_blur.dart';
 import 'package:bil_app/widget/hi_flexible_header.dart';
@@ -106,7 +107,8 @@ class _ProfilePageState extends State<ProfilePage> {
       CourseCard(courseList: _profileMo!.courseList),
       BenefitCard(
         benefitList: _profileMo!.benefitList,
-      )
+      ),
+      const DarkModelItem()
     ];
   }
 

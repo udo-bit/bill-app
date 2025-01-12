@@ -37,7 +37,7 @@ class ThemeProvider extends ChangeNotifier {
         _themeMode = ThemeMode.light;
         break;
     }
-    return _themeMode = ThemeMode.system;
+    return _themeMode!;
   }
 
   bool isDark() {
