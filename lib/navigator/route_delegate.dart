@@ -2,6 +2,7 @@ import 'package:bil_app/http/dao/login_dao.dart';
 import 'package:bil_app/model/video_model.dart';
 import 'package:bil_app/navigator/bottom_navigator.dart';
 import 'package:bil_app/navigator/hi_navigator.dart';
+import 'package:bil_app/page/dark_mode_page.dart';
 import 'package:bil_app/page/detail_page.dart';
 import 'package:bil_app/page/login_page.dart';
 import 'package:bil_app/page/register_page.dart';
@@ -58,6 +59,8 @@ class BiliRouteDelegate extends RouterDelegate<BiliPath>
       page = pageWrap(const BottomNavigator());
     } else if (routeStatus == RouteStatus.detail) {
       page = pageWrap(DetailPage(videoModel: videoModel!));
+    } else if (routeStatus == RouteStatus.darkMode) {
+      page = pageWrap(const DarkModePage());
     } else if (routeStatus == RouteStatus.registration) {
       page = pageWrap(RegisterPage(
         onJumpToLogin: () {

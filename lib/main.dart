@@ -1,5 +1,8 @@
 import 'package:bil_app/navigator/route_delegate.dart';
+import 'package:bil_app/provider/hi_provider.dart';
+import 'package:bil_app/provider/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'db/hi_cache.dart';
 
@@ -30,8 +33,19 @@ class _BiliAppState extends State<BiliApp> {
                     child: CircularProgressIndicator(),
                   ),
                 );
-          return MaterialApp(
-            home: widget,
+          return MultiProvider(
+            providers: topProviders,
+            child: Consumer<ThemeProvider>(
+              builder: (BuildContext context, ThemeProvider themeProvider,
+                  Widget? child) {
+                return MaterialApp(
+                  home: widget,
+                  theme: themeProvider.getTheme(),
+                  darkTheme: themeProvider.getTheme(isDarkMode: true),
+                  themeMode: themeProvider.getThemeMode(),
+                );
+              },
+            ),
           );
         });
   }

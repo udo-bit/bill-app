@@ -1,4 +1,6 @@
+import 'package:bil_app/provider/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../model/video_model.dart';
 import '../navigator/hi_navigator.dart';
@@ -9,23 +11,25 @@ import '../util/view_util.dart';
 class VideoLargeCard extends StatelessWidget {
   final VideoModel videoModel;
 
-  const VideoLargeCard({Key? key, required this.videoModel}) : super(key: key);
+  const VideoLargeCard({super.key, required this.videoModel});
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = context.watch<ThemeProvider>();
+    Color textColor = themeProvider.isDark() ? Colors.white : Colors.black;
     return GestureDetector(
       onTap: () {
         HiNavigator.getInstance()
             .onJumpTo(RouteStatus.detail, args: {"videoMo": videoModel});
       },
       child: Container(
-        margin: EdgeInsets.only(left: 15, right: 15, bottom: 5),
-        padding: EdgeInsets.only(bottom: 6),
+        margin: const EdgeInsets.only(left: 15, right: 15, bottom: 5),
+        padding: const EdgeInsets.only(bottom: 6),
         height: 106,
         decoration: BoxDecoration(border: borderLine(context)),
         child: Row(children: [
           _itemImage(context),
-          _buildContent(),
+          _buildContent(textColor),
         ]),
       ),
     );
@@ -43,14 +47,14 @@ class VideoLargeCard extends StatelessWidget {
               bottom: 5,
               right: 5,
               child: Container(
-                padding: EdgeInsets.all(2),
+                padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
                   color: Colors.black38,
                   borderRadius: BorderRadius.circular(2),
                 ),
                 child: Text(
                   durationTransform(videoModel.duration),
-                  style: TextStyle(color: Colors.white, fontSize: 10),
+                  style: const TextStyle(color: Colors.white, fontSize: 10),
                 ),
               ))
         ],
@@ -58,17 +62,17 @@ class VideoLargeCard extends StatelessWidget {
     );
   }
 
-  _buildContent() {
+  _buildContent(Color textColor) {
     return Expanded(
         child: Container(
-      padding: EdgeInsets.only(top: 5, left: 8, bottom: 5),
+      padding: const EdgeInsets.only(top: 5, left: 8, bottom: 5),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             videoModel.title,
-            style: TextStyle(fontSize: 12, color: Colors.black87),
+            style: TextStyle(fontSize: 12, color: textColor),
           ),
           _buildBottomContent()
         ],
@@ -81,7 +85,7 @@ class VideoLargeCard extends StatelessWidget {
       children: [
         //作者
         _owner(),
-        hiSpace(height: 5),
+        hiSpace(height: 2),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -92,7 +96,7 @@ class VideoLargeCard extends StatelessWidget {
                 ...smallIconText(Icons.list_alt, videoModel.reply)
               ],
             ),
-            Icon(
+            const Icon(
               Icons.more_vert_sharp,
               color: Colors.grey,
               size: 15,
@@ -108,11 +112,11 @@ class VideoLargeCard extends StatelessWidget {
     return Row(
       children: [
         Container(
-          padding: EdgeInsets.all(1),
+          padding: const EdgeInsets.all(1),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(2),
               border: Border.all(color: Colors.grey)),
-          child: Text(
+          child: const Text(
             'UP',
             style: TextStyle(
                 color: Colors.grey, fontSize: 8, fontWeight: FontWeight.bold),
@@ -121,7 +125,7 @@ class VideoLargeCard extends StatelessWidget {
         hiSpace(width: 8),
         Text(
           owner.name,
-          style: TextStyle(fontSize: 11, color: Colors.grey),
+          style: const TextStyle(fontSize: 11, color: Colors.grey),
         )
       ],
     );

@@ -1,10 +1,13 @@
 import 'dart:io';
 
+import 'package:bil_app/barrage/barrage_input.dart';
+import 'package:bil_app/barrage/barrage_switch.dart';
 import 'package:bil_app/http/core/hi_error.dart';
 import 'package:bil_app/http/dao/favorite_dao.dart';
 import 'package:bil_app/http/dao/video_detail_dao.dart';
 import 'package:bil_app/model/video_detail_mo.dart';
 import 'package:bil_app/model/video_model.dart';
+import 'package:bil_app/util/hi_constants.dart';
 import 'package:bil_app/util/toast.dart';
 import 'package:bil_app/widget/appbar.dart';
 import 'package:bil_app/widget/expandable_content.dart';
@@ -13,7 +16,9 @@ import 'package:bil_app/widget/navigation_bar_plus.dart';
 import 'package:bil_app/widget/video_large_card.dart';
 import 'package:bil_app/widget/video_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_overlay/flutter_overlay.dart';
 
+import '../barrage/hi_barrage.dart';
 import '../widget/video_header.dart';
 import '../widget/video_toolbar.dart';
 
@@ -26,19 +31,28 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
+  bool _inoutShowing = false;
   late TabController tabController;
   List tabs = ['简介', '评论288'];
   VideoModel? videoModel;
   VideoDetailMo? videoDetailMo;
   List<VideoModel> videoList = [];
+  final _barrageKey = GlobalKey<HiBarrageState>();
+  // late HiSocket _hiSocket;
 
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: tabs.length, vsync: this);
     videoModel = widget.videoModel;
-
+    // _initSocket();
     _loadDetail();
+  }
+
+  @override
+  void dispose() {
+    // _hiSocket.close();
+    super.dispose();
   }
 
   @override
@@ -60,12 +74,7 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                   Flexible(
                       child: TabBarView(
                     controller: tabController,
-                    children: [
-                      _buildDetailList(),
-                      Container(
-                        child: const Text('敬请期待。。。'),
-                      )
-                    ],
+                    children: [_buildDetailList(), const Text('敬请期待。。。')],
                   )),
                 ],
               )
@@ -80,6 +89,12 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
       videoModel!.url!,
       cover: model!.cover,
       overlayUi: videoAppBar(),
+      barrageUi: HiBarrage(
+        key: _barrageKey,
+        vid: model.vid,
+        autoPlay: true,
+        headers: HiConstants.headers(),
+      ),
     );
   }
 
@@ -96,13 +111,7 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _tabBar(),
-              const Padding(
-                padding: EdgeInsets.only(right: 20),
-                child: Icon(
-                  Icons.live_tv_rounded,
-                  color: Colors.grey,
-                ),
-              )
+              _buildBarrageBtn(),
             ],
           ),
         ));
@@ -191,4 +200,35 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
       return VideoLargeCard(videoModel: mo);
     }).toList();
   }
+
+  _buildBarrageBtn() {
+    return BarrageSwitch(
+        inoutShowing: _inoutShowing,
+        onShowInput: () {
+          setState(() {
+            _inoutShowing = true;
+          });
+          HiOverlay.show(context, child: BarrageInput(onTabClose: () {
+            setState(() {
+              _inoutShowing = false;
+            });
+          })).then((value) {
+            _barrageKey.currentState?.send(value);
+          });
+        },
+        onBarrageSwitch: (open) {
+          if (open) {
+            _barrageKey.currentState!.play();
+          } else {
+            _barrageKey.currentState!.pause();
+          }
+        });
+  }
+
+  // void _initSocket() {
+  //   _hiSocket = HiSocket(HiConstants.headers());
+  //   _hiSocket.open(videoModel!.vid).listen((value) {
+  //     print('接收到：$value');
+  //   });
+  // }
 }

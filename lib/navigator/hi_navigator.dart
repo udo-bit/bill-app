@@ -1,3 +1,4 @@
+import 'package:bil_app/page/dark_mode_page.dart';
 import 'package:bil_app/page/detail_page.dart';
 import 'package:bil_app/page/login_page.dart';
 import 'package:bil_app/page/register_page.dart';
@@ -14,7 +15,7 @@ pageWrap(Widget child) {
 }
 
 // 路由状态
-enum RouteStatus { login, registration, home, detail, unknown }
+enum RouteStatus { login, registration, home, detail, unknown, darkMode }
 
 // 获取routeStatus在路由堆栈中的位置
 // 堆栈中存的是页面，路由状态可以看作是地址栏的url
@@ -36,6 +37,8 @@ RouteStatus getStatus(MaterialPage page) {
     return RouteStatus.registration;
   } else if (page.child is BottomNavigator) {
     return RouteStatus.home;
+  } else if (page.child is DarkModePage) {
+    return RouteStatus.darkMode;
   } else if (page.child is DetailPage) {
     return RouteStatus.detail;
   } else {

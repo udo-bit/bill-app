@@ -2,11 +2,14 @@ import 'package:bil_app/core/hi_state.dart';
 import 'package:bil_app/http/core/hi_error.dart';
 import 'package:bil_app/http/dao/home_dao.dart';
 import 'package:bil_app/page/home_tab_page.dart';
+import 'package:bil_app/provider/theme_provider.dart';
+import 'package:bil_app/util/color.dart';
 import 'package:bil_app/util/toast.dart';
 import 'package:bil_app/widget/hi_tab.dart';
 import 'package:bil_app/widget/loading_container.dart';
 import 'package:bil_app/widget/navigation_bar_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../model/home_mo.dart';
 import '../navigator/hi_navigator.dart';
@@ -58,7 +61,15 @@ class _HomePageState extends HiState<HomePage>
   }
 
   @override
+  void didChangePlatformBrightness() {
+    context.watch<ThemeProvider>().darkModeChange();
+    super.didChangePlatformBrightness();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var themeProvider = context.watch<ThemeProvider>();
+    var color = themeProvider.isDark() ? HiColor.dark_bg : Colors.white;
     super.build(context);
     return Scaffold(
         body: LoadingContainer(
@@ -68,7 +79,7 @@ class _HomePageState extends HiState<HomePage>
         children: [
           NavigationBarPlus(child: _appBar()),
           Container(
-            color: Colors.white,
+            color: color,
             child: _tabBar(),
           ),
           Flexible(
@@ -172,12 +183,20 @@ class _HomePageState extends HiState<HomePage>
             Icons.import_export_outlined,
             color: Colors.grey,
           ),
-          const Padding(
-              padding: EdgeInsets.only(left: 12),
-              child: Icon(
-                Icons.mail_outline,
-                color: Colors.grey,
-              ))
+          Padding(
+            padding: const EdgeInsets.only(left: 12),
+            child: InkWell(
+                onTap: () {
+                  context.read<ThemeProvider>().getThemeMode() ==
+                          ThemeMode.light
+                      ? context.read<ThemeProvider>().setTheme(ThemeMode.dark)
+                      : context.read<ThemeProvider>().setTheme(ThemeMode.light);
+                },
+                child: const Icon(
+                  Icons.mail_outline,
+                  color: Colors.grey,
+                )),
+          )
         ],
       ),
     );

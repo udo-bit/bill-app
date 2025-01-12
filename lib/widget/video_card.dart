@@ -1,7 +1,9 @@
 import 'package:bil_app/model/video_model.dart';
 import 'package:bil_app/navigator/hi_navigator.dart';
+import 'package:bil_app/provider/theme_provider.dart';
 import 'package:bil_app/util/format_util.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../util/view_util.dart';
 
@@ -14,6 +16,8 @@ class VideoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = context.watch<ThemeProvider>();
+    Color textColor = themeProvider.isDark() ? Colors.white : Colors.black;
     return InkWell(
         onTap: () {
           HiNavigator.getInstance()
@@ -28,7 +32,7 @@ class VideoCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [_itemImage(context), _infoText()],
+                children: [_itemImage(context), _infoText(textColor)],
               ),
             ),
           ),
@@ -65,7 +69,7 @@ class VideoCard extends StatelessWidget {
     return Container();
   }
 
-  _infoText() {
+  _infoText(Color textColor) {
     return Expanded(
         child: Container(
       padding: const EdgeInsets.only(top: 5, left: 8, right: 8, bottom: 5),
@@ -77,9 +81,9 @@ class VideoCard extends StatelessWidget {
             videoModel.title,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 12, color: Colors.black87),
+            style: TextStyle(fontSize: 12, color: textColor),
           ),
-          _owner()
+          _owner(textColor)
         ],
       ),
     ));
@@ -111,7 +115,7 @@ class VideoCard extends StatelessWidget {
     );
   }
 
-  _owner() {
+  _owner(Color textColor) {
     var owner = videoModel.owner;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -126,7 +130,7 @@ class VideoCard extends StatelessWidget {
               padding: const EdgeInsets.only(left: 8),
               child: Text(
                 owner.name,
-                style: const TextStyle(fontSize: 11, color: Colors.black87),
+                style: TextStyle(fontSize: 11, color: textColor),
               ),
             )
           ],
